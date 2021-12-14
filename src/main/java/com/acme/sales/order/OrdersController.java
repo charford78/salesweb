@@ -1,5 +1,7 @@
 package com.acme.sales.order;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.acme.sales.customer.CustomerRepository;
 import com.acme.sales.orderline.Orderline;
 
 @CrossOrigin
@@ -22,6 +25,8 @@ public class OrdersController {
 	
 	@Autowired
 	private OrderRepository ordRepo;
+	@Autowired
+	private CustomerRepository custRepo;
 	
 	@GetMapping
 	public ResponseEntity<Iterable<Order>> GetAll(){
@@ -77,13 +82,13 @@ public class OrdersController {
 	}
 	
 	@GetMapping("customer/{customerId}")
-	public ResponseEntity<Iterable<Order>> GetOrderNotCustomer(@PathVariable int customerId){
-		var customer = ordRepo.findByCustomerId(customerId);
+	public ResponseEntity<List<Order>> GetOrderNotCustomer(@PathVariable int customerId){
+		var customer = custRepo.findById(customerId);
 		if(customer.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		var orders = ordRepo.findByCustomerIdNot(customerId);
-		return new ResponseEntity<Iterable<Order>> (orders, HttpStatus.OK);
+		return new ResponseEntity<List<Order>> (orders, HttpStatus.OK);
 	}
 	
 	@SuppressWarnings("rawtypes")

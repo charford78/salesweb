@@ -1,7 +1,7 @@
 package com.acme.sales.customer;
 
 // instead of having all of these import statements could instead use:
-// import javax.persistenc.*
+// import javax.persistence.*
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
